@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Person {
     private String name;
     private String email;
+    private int age;
     private ArrayList<String> likes;
 
     public Person() {
@@ -30,6 +31,14 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public ArrayList<String> getLikes() {
