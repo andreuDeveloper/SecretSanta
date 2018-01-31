@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">SecretSanta</string>
-    <string name="name_title_participant">Enter a Name for the Participant.</string>
+    <string name="name_title_participant">Enter a Name.</string>
 </resources>
