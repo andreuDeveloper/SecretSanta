@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">SecretSanta</string>
-    <string name="name_title_participant">Enter a Name</string>
     <string name="app_name">Secret Santa</string>
     <string name="app_name_caps_nl">SECRET\nSANTA</string>
+    <string name="name_title_participant">Enter a Name</string>
 </resources>
