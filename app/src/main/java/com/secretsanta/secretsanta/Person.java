@@ -2,19 +2,26 @@ package com.secretsanta.secretsanta;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by andres on 30/01/2018.
  */
 
 public class Person {
+    private UUID id;
     private String name;
     private String email;
     private int age;
     private ArrayList<String> likes;
 
     public Person() {
+        id = UUID.randomUUID();
+        name = id.toString()+"name";
+    }
 
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
