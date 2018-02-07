@@ -1,5 +1,6 @@
 package com.secretsanta.secretsanta;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.github.clans.fab.FloatingActionButton;
+
 
 import java.util.List;
 
@@ -15,21 +18,36 @@ import java.util.List;
  * Created by Andreu on 31/01/2018.
  */
 
-public class ParticipantListFragment extends Fragment{
+public class ParticipantListFragment extends Fragment {
 
     private RecyclerView participantRecyclerView;
+    private FloatingActionButton btnAddNewParticipant;
     private ParticipantAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_participant_list, container, false);
+
         participantRecyclerView = (RecyclerView) view.findViewById(R.id.participant_recycler_view);
         participantRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        this.btnAddNewParticipant = (FloatingActionButton) view.findViewById(R.id.btnAddNewParticipant);
+        this.btnAddNewParticipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewParticipant(v);
+            }
+        });
 
         updateUI();
 
         return view;
+    }
+
+    public void addNewParticipant(View v){
+        Intent i = new Intent(this.getActivity(), ParticipantActivity.class);
+        this.startActivity( i );
     }
 
     private void updateUI() {

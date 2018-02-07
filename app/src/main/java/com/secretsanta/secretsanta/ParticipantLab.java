@@ -15,6 +15,12 @@ public class ParticipantLab {
     private static ParticipantLab sParticipantLab;
     private List<Person> lParticipants;
 
+    /**
+     * Este metodo es lo que llamaremos para crear la clase, si no existe la lista de participantes
+     * nos la crea y nos la devuelve, si ya existia nos la devolvera tambien
+     * @param context
+     * @return
+     */
     public static ParticipantLab get(Context context) {
         if (sParticipantLab == null) {
             sParticipantLab = new ParticipantLab(context);
@@ -23,7 +29,7 @@ public class ParticipantLab {
     }
     private ParticipantLab(Context context) {
         this.lParticipants = new ArrayList<>();
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 13224; i++){
             Person p = new Person();
             p.setName("name"+i);
             p.setAge(10+ i*3);
