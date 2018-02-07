@@ -29,14 +29,25 @@ public class ParticipantFragment extends Fragment {
 
         EditText txtDate=(EditText) getView().findViewById(R.id.txtdate);
         txtDate.setKeyListener(null);
+        txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    DateDialog dialog = new DateDialog(view);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, "DatePicker");
+                }
+            }
+        });
+
         txtDate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 DateDialog dialog = new DateDialog(v);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 dialog.show(ft, "DatePicker");
-
             }
         });
+
     }
 
 
