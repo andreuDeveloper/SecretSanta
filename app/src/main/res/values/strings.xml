@@ -4,4 +4,6 @@
     <string name="name_title_participant">Enter a Name</string>
     <string name="hint_birthday">Touch here to select a date</string>
     <string name="hint_email">Enter your email</string>
+    <string name="hint_likes">Games,Music,Films...</string>
 </resources>
+
