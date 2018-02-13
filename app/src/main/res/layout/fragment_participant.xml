@@ -207,7 +207,7 @@
             fab:fab_colorRipple="#cca700"/>
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/addParticipant"
+            android:id="@+id/btnSaveParticipant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/add"

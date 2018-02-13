@@ -45,13 +45,19 @@ public class ParticipantListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
     public void addNewParticipant(View v){
         Intent i = new Intent(this.getActivity(), ParticipantActivity.class);
         this.startActivity( i );
     }
 
     private void updateUI() {
-        ParticipantLab participantLab = ParticipantLab.get(getActivity());
+        ParticipantLab participantLab = ParticipantLab.get(getContext());
         List<Person> crimes = participantLab.getParticipants();
         mAdapter = new ParticipantAdapter(crimes);
         participantRecyclerView.setAdapter(mAdapter);

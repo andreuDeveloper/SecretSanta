@@ -29,7 +29,7 @@ public class ParticipantLab {
     }
     private ParticipantLab(Context context) {
         this.lParticipants = new ArrayList<>();
-        for (int i = 0; i < 13224; i++){
+        for (int i = 0; i < 1; i++){
             Person p = new Person();
             p.setName("name"+i);
             p.setAge(10+ i*3);
