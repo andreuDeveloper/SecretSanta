@@ -9,8 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import com.github.clans.fab.FloatingActionButton;
 
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -58,16 +63,37 @@ public class ParticipantListFragment extends Fragment {
 
     private void updateUI() {
         ParticipantLab participantLab = ParticipantLab.get(getContext());
-        List<Person> crimes = participantLab.getParticipants();
-        mAdapter = new ParticipantAdapter(crimes);
+        List<Person> participants = participantLab.getParticipants();
+        mAdapter = new ParticipantAdapter(participants);
         participantRecyclerView.setAdapter(mAdapter);
     }
 
-    private class ParticipantHolder extends RecyclerView.ViewHolder {
-        public TextView mTitleTextView;
+    private class ParticipantHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        //public TextView mTitleTextView;
+
+        private CircleImageView imagePerson;
+        private TextView txtNamePerson;
+
+        private Person mPerson;
+
+        public void bindPerson(Person person) {
+            mPerson = person;
+            txtNamePerson.setText(mPerson.getName());
+            if (mPerson.hasImage()) {
+                imagePerson.setImageBitmap(mPerson.getImage());
+            }
+        }
+
         public ParticipantHolder(View itemView) {
             super(itemView);
-            mTitleTextView = (TextView) itemView;
+            itemView.setOnClickListener(this);
+            txtNamePerson = (TextView) itemView.findViewById(R.id.list_name);
+            imagePerson = (CircleImageView) itemView.findViewById(R.id.list_picture);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(),mPerson.getName() + " clicked!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -81,13 +107,14 @@ public class ParticipantListFragment extends Fragment {
         public ParticipantHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+                    .inflate(R.layout.list_item_participants, parent, false);
             return new ParticipantHolder(view);
         }
         @Override
         public void onBindViewHolder(ParticipantHolder holder, int position) {
             Person p = lParticipants.get(position);
-            holder.mTitleTextView.setText(p.getName());
+            //holder.mTitleTextView.setText(p.getName());
+            holder.bindPerson(p);
         }
         @Override
         public int getItemCount() {

@@ -1,7 +1,9 @@
 package com.secretsanta.secretsanta;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -10,21 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.github.clans.fab.FloatingActionButton;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-import static java.util.Calendar.DATE;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
+import static android.app.Activity.RESULT_OK;
 
 
 public class ParticipantFragment extends Fragment {
@@ -34,6 +26,8 @@ public class ParticipantFragment extends Fragment {
     private EditText txtPersonBirthday;
     private EditText txtPersonEmail;
     private EditText txtPersonLikes;
+    private CircleImageView imgProfile;
+    private boolean pictureDone = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +52,14 @@ public class ParticipantFragment extends Fragment {
                 saveNewParticipant();
             }
         });
+        this.imgProfile = (CircleImageView) v.findViewById(R.id.profile_image);
+        this.imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doPicture();
+            }
+        });
+
 
 
 
@@ -77,23 +79,34 @@ public class ParticipantFragment extends Fragment {
             int age = getAge(year, month, day);
             //Toast.makeText(getContext(), age, Toast.LENGTH_LONG).show();
             if (age > 0) {
-                ParticipantLab participantLab = ParticipantLab.get(getContext());
-                Person p = new Person();
-                p.setName(txtPersonName.getText().toString());
-                p.setAge(age);
-                p.setEmail(txtPersonEmail.getText().toString());
 
-                participantLab.addParticipant(p);
-                Toast.makeText(getContext(), "Added successfully", Toast.LENGTH_LONG).show();
+                if (isEmailValid(txtPersonEmail.getText().toString())) {
+                    ParticipantLab participantLab = ParticipantLab.get(getContext());
+                    Person p = new Person();
+                    p.setName(txtPersonName.getText().toString());
+                    p.setAge(age);
+                    p.setEmail(txtPersonEmail.getText().toString());
+                    if (pictureDone) {
+                        Toast.makeText(getContext(), "Added image", Toast.LENGTH_LONG).show();
+                        p.setImage(imgProfile.getDrawingCache());
+                    }
 
-                Log.v("NAME", p.getName());
-                Log.v("AGE", Integer.toString(p.getAge()));
-                Log.v("EMAIL", p.getEmail());
+                    participantLab.addParticipant(p);
+                    Toast.makeText(getContext(), "Added successfully", Toast.LENGTH_LONG).show();
 
-                Intent i = new Intent(getActivity(), ParticipantListActivity.class);
-                startActivity( i );
+                    Log.v("NAME", p.getName());
+                    Log.v("AGE", Integer.toString(p.getAge()));
+                    Log.v("EMAIL", p.getEmail());
+
+                    Intent i = new Intent(getActivity(), ParticipantListActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getContext(), "Insert a valid email", Toast.LENGTH_LONG).show();
+                    txtPersonEmail.requestFocus();
+                }
             } else {
                 Toast.makeText(getContext(), "Insert a valid date", Toast.LENGTH_LONG).show();
+                txtPersonEmail.requestFocus();
             }
         }
     }
@@ -104,6 +117,10 @@ public class ParticipantFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    private boolean isEmailValid(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public void onStart(){
@@ -144,8 +161,20 @@ public class ParticipantFragment extends Fragment {
         if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
             age--;
         }
-
         return age;
+    }
+
+    private void doPicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,requestCode,data);
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        this.imgProfile.setImageBitmap(bitmap);
+        pictureDone = true;
     }
 
 }

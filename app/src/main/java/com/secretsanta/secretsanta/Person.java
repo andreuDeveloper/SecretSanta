@@ -1,6 +1,8 @@
 package com.secretsanta.secretsanta;
 
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -13,11 +15,28 @@ public class Person {
     private String name;
     private String email;
     private int age;
+    private Bitmap image;
     private ArrayList<String> likes;
+    private boolean hasImage;
 
     public Person() {
         id = UUID.randomUUID();
         name = id.toString()+"name";
+        image = null;
+        hasImage = false;
+    }
+
+    public boolean hasImage(){
+        return hasImage;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+        hasImage = true;
     }
 
     public UUID getId() {

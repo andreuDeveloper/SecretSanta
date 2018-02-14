@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorFront">#FFEE58</color>
     <color name="background">#FBC02D</color>
+    <color name="white">#FFFFFF</color>
     <!-- https://material.io/guidelines/style/color.html#color-color-palette YELLOW-->
 </resources>

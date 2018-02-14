@@ -1,6 +1,7 @@
 package com.secretsanta.secretsanta;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +30,12 @@ public class ParticipantLab {
     }
     private ParticipantLab(Context context) {
         this.lParticipants = new ArrayList<>();
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 2; i++){
             Person p = new Person();
             p.setName("name"+i);
-            p.setAge(10+ i*3);
             this.lParticipants.add(p);
         }
+
     }
 
     public Person getParticipant(UUID id) {
