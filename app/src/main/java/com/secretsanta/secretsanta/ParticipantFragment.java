@@ -16,6 +16,7 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.Calendar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 
@@ -86,7 +87,7 @@ public class ParticipantFragment extends Fragment {
                     p.setName(txtPersonName.getText().toString());
                     p.setAge(age);
                     p.setEmail(txtPersonEmail.getText().toString());
-                    if (pictureDone) {
+                    if (imgProfile != null) {
                         Toast.makeText(getContext(), "Added image", Toast.LENGTH_LONG).show();
                         p.setImage(imgProfile.getDrawingCache());
                     }
@@ -165,16 +166,19 @@ public class ParticipantFragment extends Fragment {
     }
 
     private void doPicture() {
+        //Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePictureIntent, 0);
+        startActivityForResult(takePictureIntent, 6666);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,requestCode,data);
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        this.imgProfile.setImageBitmap(bitmap);
-        pictureDone = true;
+        if(resultCode != RESULT_CANCELED) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            this.imgProfile.setImageBitmap(bitmap);
+            pictureDone = true;
+        }
     }
 
 }
