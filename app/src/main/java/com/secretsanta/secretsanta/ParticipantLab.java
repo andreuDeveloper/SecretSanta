@@ -30,12 +30,6 @@ public class ParticipantLab {
     }
     private ParticipantLab(Context context) {
         this.lParticipants = new ArrayList<>();
-        for (int i = 0; i < 2; i++){
-            Person p = new Person();
-            p.setName("name"+i);
-            this.lParticipants.add(p);
-        }
-
     }
 
     public Person getParticipant(UUID id) {

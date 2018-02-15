@@ -2,6 +2,7 @@ package com.secretsanta.secretsanta;
 
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -22,8 +23,6 @@ public class Person {
     public Person() {
         id = UUID.randomUUID();
         name = id.toString()+"name";
-        image = null;
-        hasImage = false;
     }
 
     public boolean hasImage(){

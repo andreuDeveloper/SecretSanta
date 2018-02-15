@@ -2,6 +2,7 @@ package com.secretsanta.secretsanta;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -14,10 +15,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import java.util.Calendar;
+import java.util.UUID;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 
 public class ParticipantFragment extends Fragment {
@@ -28,11 +30,25 @@ public class ParticipantFragment extends Fragment {
     private EditText txtPersonEmail;
     private EditText txtPersonLikes;
     private CircleImageView imgProfile;
+    private Bitmap bitmapPhoto;
     private boolean pictureDone = false;
+    private int age;
+
+    private Person mParticipant = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UUID participantId = (UUID) getActivity().getIntent()
+                .getSerializableExtra(ParticipantActivity.EXTRA_PARTICIPANT_ID);
+
+        if (participantId != null) {
+            mParticipant = ParticipantLab.get(getActivity()).getParticipant(participantId);
+            Toast.makeText(getContext(), "Visualizar", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Agregar nuevo", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 
@@ -61,6 +77,10 @@ public class ParticipantFragment extends Fragment {
             }
         });
 
+        if (mParticipant != null) {
+            completeFiledsWithPersonInfo();
+        }
+
 
 
 
@@ -68,50 +88,43 @@ public class ParticipantFragment extends Fragment {
         return v;
     }
 
+    private void completeFiledsWithPersonInfo(){
+        Log.d("AAAAA","Entrado porque persona no es nula");
+        Log.d("AAAAA", mParticipant.getName());
+        imgProfile.setImageBitmap(mParticipant.getImage());
+        txtPersonName.setText(mParticipant.getName());
+        //txtPersonBirthday.setText(mParticipant.getAge());
+        txtPersonEmail.setText(mParticipant.getEmail());
+        //txtPersonLikes.setText(mParticipant.getLikes());
+    }
+
     private void saveNewParticipant(){
-        if (checkFields(txtPersonName) && checkFields(txtPersonBirthday) && checkFields(txtPersonEmail)) {
+        if (checkFieldsNotNull(txtPersonName) && checkFieldsNotNull(txtPersonBirthday) && checkFieldsNotNull(txtPersonEmail)
+                && checkDateValid() && isEmailValid(txtPersonEmail.getText().toString())) {
 
-            int day = Integer.parseInt(txtPersonBirthday.getText().toString().substring(0,txtPersonBirthday.getText().toString().indexOf("-")));
-            int month = Integer.parseInt(txtPersonBirthday.getText().toString().substring(txtPersonBirthday.getText().toString().indexOf("-")+1,
-                    txtPersonBirthday.getText().toString().indexOf("-",txtPersonBirthday.getText().toString().indexOf("-")+1)));
-            int year = Integer.parseInt(txtPersonBirthday.getText().toString().substring(txtPersonBirthday.getText().toString().indexOf("-",txtPersonBirthday.getText().toString().indexOf("-")+1)+1,
-                    txtPersonBirthday.getText().toString().length()));
-
-            int age = getAge(year, month, day);
-            //Toast.makeText(getContext(), age, Toast.LENGTH_LONG).show();
-            if (age > 0) {
-
-                if (isEmailValid(txtPersonEmail.getText().toString())) {
                     ParticipantLab participantLab = ParticipantLab.get(getContext());
                     Person p = new Person();
                     p.setName(txtPersonName.getText().toString());
                     p.setAge(age);
                     p.setEmail(txtPersonEmail.getText().toString());
-                    if (imgProfile != null) {
-                        Toast.makeText(getContext(), "Added image", Toast.LENGTH_LONG).show();
-                        p.setImage(imgProfile.getDrawingCache());
+                    if (pictureDone) {
+                        p.setImage(bitmapPhoto);
+                    } else {
+                        p.setImage(BitmapFactory.decodeResource(getResources(), R.mipmap.photo));
                     }
 
                     participantLab.addParticipant(p);
                     Toast.makeText(getContext(), "Added successfully", Toast.LENGTH_LONG).show();
 
-                    Log.v("NAME", p.getName());
-                    Log.v("AGE", Integer.toString(p.getAge()));
-                    Log.v("EMAIL", p.getEmail());
 
                     Intent i = new Intent(getActivity(), ParticipantListActivity.class);
                     startActivity(i);
-                } else {
-                    Toast.makeText(getContext(), "Insert a valid email", Toast.LENGTH_LONG).show();
-                    txtPersonEmail.requestFocus();
-                }
-            } else {
-                Toast.makeText(getContext(), "Insert a valid date", Toast.LENGTH_LONG).show();
-                txtPersonEmail.requestFocus();
-            }
+                    getActivity().finish();
         }
     }
-    private boolean checkFields(EditText editText){
+
+
+    private boolean checkFieldsNotNull(EditText editText){
         if (editText.getText().toString().length() == 0){
             editText.requestFocus();
             Toast.makeText(getContext(), "Complete the field", Toast.LENGTH_SHORT).show();
@@ -120,8 +133,32 @@ public class ParticipantFragment extends Fragment {
         return true;
     }
 
+    private boolean checkDateValid(){
+        int day = Integer.parseInt(txtPersonBirthday.getText().toString().substring(0,txtPersonBirthday.getText().toString().indexOf("-")));
+        int month = Integer.parseInt(txtPersonBirthday.getText().toString().substring(txtPersonBirthday.getText().toString().indexOf("-")+1,
+                txtPersonBirthday.getText().toString().indexOf("-",txtPersonBirthday.getText().toString().indexOf("-")+1)));
+        int year = Integer.parseInt(txtPersonBirthday.getText().toString().substring(txtPersonBirthday.getText().toString().indexOf("-",txtPersonBirthday.getText().toString().indexOf("-")+1)+1,
+                txtPersonBirthday.getText().toString().length()));
+
+        age = getAge(year, month, day);
+
+        if (age > 0) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), "Insert a valid birthday", Toast.LENGTH_LONG).show();
+            txtPersonBirthday.requestFocus();
+            return false;
+        }
+    }
+
     private boolean isEmailValid(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return true;
+        } else{
+            Toast.makeText(getContext(), "Insert a valid email", Toast.LENGTH_LONG).show();
+            txtPersonEmail.requestFocus();
+            return false;
+        }
     }
 
     public void onStart(){
@@ -175,8 +212,8 @@ public class ParticipantFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,requestCode,data);
         if(resultCode != RESULT_CANCELED) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            this.imgProfile.setImageBitmap(bitmap);
+            bitmapPhoto = (Bitmap) data.getExtras().get("data");
+            this.imgProfile.setImageBitmap(bitmapPhoto);
             pictureDone = true;
         }
     }

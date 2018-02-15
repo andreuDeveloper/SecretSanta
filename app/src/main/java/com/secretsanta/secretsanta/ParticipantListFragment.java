@@ -94,6 +94,8 @@ public class ParticipantListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(),mPerson.getName() + " clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = ParticipantActivity.newIntent(getActivity(), mPerson.getId());
+            startActivity(intent);
         }
     }
 

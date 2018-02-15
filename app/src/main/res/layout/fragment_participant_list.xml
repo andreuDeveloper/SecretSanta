@@ -57,7 +57,7 @@
             android:id="@+id/btnRemoveParticipant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/delete"
+            android:src="@mipmap/done"
             fab:fab_size="mini"
             fab:fab_label="Menu item 1"
             fab:fab_colorNormal="#F5C900"
