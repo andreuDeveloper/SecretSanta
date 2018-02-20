@@ -16,8 +16,9 @@ public class Person {
     private String name;
     private String email;
     private int age;
+    private String birthday;
     private Bitmap image;
-    private ArrayList<String> likes;
+    private String likes;
     private boolean hasImage;
 
     public Person() {
@@ -66,11 +67,19 @@ public class Person {
         this.age = age;
     }
 
-    public ArrayList<String> getLikes() {
+    public String getLikes() {
         return likes;
     }
 
-    public void setLikes(ArrayList<String> likes) {
+    public void setLikes(String likes) {
         this.likes = likes;
+    }
+
+    public void setBirthday(String b){
+        this.birthday = b;
+    }
+
+    public String getBirthday(){
+        return this.birthday;
     }
 }

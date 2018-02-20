@@ -33,22 +33,25 @@ public class ParticipantFragment extends Fragment {
     private Bitmap bitmapPhoto;
     private boolean pictureDone = false;
     private int age;
+    private String birthday;
 
     private Person mParticipant = null;
+
+    private UUID participantId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID participantId = (UUID) getActivity().getIntent()
+        participantId = (UUID) getActivity().getIntent()
                 .getSerializableExtra(ParticipantActivity.EXTRA_PARTICIPANT_ID);
 
+        //If participant ID == null --> we entered here to add a new participant
         if (participantId != null) {
             mParticipant = ParticipantLab.get(getActivity()).getParticipant(participantId);
             Toast.makeText(getContext(), "Visualizar", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "Agregar nuevo", Toast.LENGTH_SHORT).show();
         }
-
 
     }
 
@@ -63,12 +66,22 @@ public class ParticipantFragment extends Fragment {
         this.txtPersonEmail = (EditText) v.findViewById(R.id.email_address_text);
         this.txtPersonLikes = (EditText) v.findViewById(R.id.likes_text);
         this.btnSaveParticipant = (FloatingActionButton) v.findViewById(R.id.btnSaveParticipant);
-        this.btnSaveParticipant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveNewParticipant();
-            }
-        });
+        if (this.participantId == null) {
+            this.btnSaveParticipant.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveNewParticipant();
+                }
+            });
+        } else {
+            this.btnSaveParticipant.setBackgroundResource(R.mipmap.save);
+            this.btnSaveParticipant.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editParticipant(participantId);
+                }
+            });
+        }
         this.imgProfile = (CircleImageView) v.findViewById(R.id.profile_image);
         this.imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +94,6 @@ public class ParticipantFragment extends Fragment {
             completeFiledsWithPersonInfo();
         }
 
-
-
-
-
         return v;
     }
 
@@ -93,9 +102,9 @@ public class ParticipantFragment extends Fragment {
         Log.d("AAAAA", mParticipant.getName());
         imgProfile.setImageBitmap(mParticipant.getImage());
         txtPersonName.setText(mParticipant.getName());
-        //txtPersonBirthday.setText(mParticipant.getAge());
+        txtPersonBirthday.setText(mParticipant.getBirthday());
         txtPersonEmail.setText(mParticipant.getEmail());
-        //txtPersonLikes.setText(mParticipant.getLikes());
+        txtPersonLikes.setText(mParticipant.getLikes());
     }
 
     private void saveNewParticipant(){
@@ -106,7 +115,9 @@ public class ParticipantFragment extends Fragment {
                     Person p = new Person();
                     p.setName(txtPersonName.getText().toString());
                     p.setAge(age);
+                    p.setBirthday(this.txtPersonBirthday.getText().toString());
                     p.setEmail(txtPersonEmail.getText().toString());
+                    p.setLikes(this.txtPersonLikes.getText().toString());
                     if (pictureDone) {
                         p.setImage(bitmapPhoto);
                     } else {
@@ -141,6 +152,7 @@ public class ParticipantFragment extends Fragment {
                 txtPersonBirthday.getText().toString().length()));
 
         age = getAge(year, month, day);
+        birthday = txtPersonBirthday.getText().toString();
 
         if (age > 0) {
             return true;
@@ -206,6 +218,28 @@ public class ParticipantFragment extends Fragment {
         //Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, 6666);
+    }
+
+    private void editParticipant(UUID participantId) {
+        Toast.makeText(getContext(), "Will save", Toast.LENGTH_LONG).show();
+
+
+        if (checkFieldsNotNull(txtPersonName) && checkFieldsNotNull(txtPersonBirthday) && checkFieldsNotNull(txtPersonEmail)
+                && checkDateValid() && isEmailValid(txtPersonEmail.getText().toString())) {
+
+            ParticipantLab participantLab = ParticipantLab.get(getContext());
+            Person p = ParticipantLab.get(getActivity()).getParticipant(participantId);
+            p.setName(txtPersonName.getText().toString());
+            p.setAge(age);
+            p.setEmail(txtPersonEmail.getText().toString());
+            if (pictureDone) {
+                p.setImage(bitmapPhoto);
+            } else {
+                p.setImage(BitmapFactory.decodeResource(getResources(), R.mipmap.photo));
+            }
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
