@@ -1,5 +1,7 @@
 package com.secretsanta.secretsanta;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ParticipantListFragment extends Fragment {
 
     private RecyclerView participantRecyclerView;
+    private com.github.clans.fab.FloatingActionButton btnListDone;
     private FloatingActionButton btnAddNewParticipant;
     private ParticipantAdapter mAdapter;
 
@@ -45,6 +48,42 @@ public class ParticipantListFragment extends Fragment {
             }
         });
 
+        this.btnListDone = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.btnListDone);
+        this.btnListDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Build an AlertDialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                // Set a title for alert dialog
+                builder.setTitle("Create event");
+
+                // Ask the final question
+                builder.setMessage("Are you sure that you don't want to add more participants?");
+
+                // Set the alert dialog yes button click listener
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(getActivity(), EventActivity.class);
+                        startActivity( i );
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                // Display the alert dialog on interface
+                dialog.show();
+            }
+        });
         updateUI();
 
         return view;

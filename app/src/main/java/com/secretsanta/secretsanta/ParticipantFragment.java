@@ -154,7 +154,7 @@ public class ParticipantFragment extends Fragment {
         age = getAge(year, month, day);
         birthday = txtPersonBirthday.getText().toString();
 
-        if (age > 0) {
+        if (age >= 0) {
             return true;
         } else {
             Toast.makeText(getContext(), "Insert a valid birthday", Toast.LENGTH_LONG).show();
@@ -234,10 +234,15 @@ public class ParticipantFragment extends Fragment {
             p.setEmail(txtPersonEmail.getText().toString());
             if (pictureDone) {
                 p.setImage(bitmapPhoto);
-            } else {
+            } else if (!p.hasImage()){
                 p.setImage(BitmapFactory.decodeResource(getResources(), R.mipmap.photo));
             }
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+
+
+            Intent i = new Intent(getActivity(), ParticipantListActivity.class);
+            startActivity(i);
+            getActivity().finish();
         }
 
     }

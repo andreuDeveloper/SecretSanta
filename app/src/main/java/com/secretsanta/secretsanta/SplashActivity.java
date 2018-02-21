@@ -1,9 +1,11 @@
 package com.secretsanta.secretsanta;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,7 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_splash);
-
+        
         //Sound
         MediaPlayer mp = MediaPlayer.create(this, R.raw.sound_open);
         mp.start();
