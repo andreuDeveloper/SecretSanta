@@ -196,7 +196,18 @@
         fab:menu_fab_hide_animation="@anim/my_hide_animation">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/removeParticipant"
+            android:id="@+id/btnGoBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            fab:fab_size="mini"
+            fab:fab_label="Menu item 0"
+            fab:fab_colorNormal="#F5C900"
+            fab:fab_colorPressed="#ffd414"
+            fab:fab_colorRipple="#cca700"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/btnRemoveParticipant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/delete"

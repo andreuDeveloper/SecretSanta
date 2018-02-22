@@ -52,36 +52,14 @@ public class ParticipantListFragment extends Fragment {
         this.btnListDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Build an AlertDialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                // Set a title for alert dialog
-                builder.setTitle("Create event");
+                ParticipantLab lb = ParticipantLab.get(getContext());
+                //if (lb.getNumberParticipants() >= 3) {
+                    yesNoDialog();
+                //} else {
+                //    confirmDialog();
+                //}
 
-                // Ask the final question
-                builder.setMessage("Are you sure that you don't want to add more participants?");
-
-                // Set the alert dialog yes button click listener
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(getActivity(), EventActivity.class);
-                        startActivity( i );
-                    }
-                });
-
-                // Set the alert dialog no button click listener
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do something when No button clicked
-
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                // Display the alert dialog on interface
-                dialog.show();
             }
         });
         updateUI();
@@ -105,6 +83,56 @@ public class ParticipantListFragment extends Fragment {
         List<Person> participants = participantLab.getParticipants();
         mAdapter = new ParticipantAdapter(participants);
         participantRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void yesNoDialog(){
+        // Build an AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Set a title for alert dialog
+        builder.setTitle("Create event");
+
+        // Ask the final question
+        builder.setMessage("Are you sure that you don't want to add more participants?");
+
+        // Set the alert dialog yes button click listener
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(getActivity(), EventActivity.class);
+                startActivity( i );
+            }
+        });
+
+        // Set the alert dialog no button click listener
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do something when No button clicked
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        // Display the alert dialog on interface
+        dialog.show();
+    }
+
+    public void confirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Set a title for alert dialog
+        builder.setTitle("Not enought participants");
+
+        // Ask the final question
+        builder.setMessage("Insert at least 3 participants");
+
+        // Set the alert dialog yes button click listener
+        builder.setPositiveButton("Ok", null);
+
+        AlertDialog dialog = builder.create();
+        // Display the alert dialog on interface
+        dialog.show();
     }
 
     private class ParticipantHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -161,5 +189,8 @@ public class ParticipantListFragment extends Fragment {
         public int getItemCount() {
             return lParticipants.size();
         }
+
+
+
     }
 }

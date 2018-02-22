@@ -41,11 +41,19 @@ public class ParticipantLab {
         return null;
     }
 
+    public Person getParticipant(int i){
+        return this.lParticipants.get(i);
+    }
 
-    public List getParticipants(){
+
+    public List getParticipants() {
         return this.lParticipants;
     }
 
+
+    public int getNumberParticipants(){
+        return this.lParticipants.size();
+    }
 
     public void addParticipant(Person p){
         this.lParticipants.add(p);

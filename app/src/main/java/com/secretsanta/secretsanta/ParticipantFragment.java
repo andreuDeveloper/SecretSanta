@@ -24,7 +24,10 @@ import static android.app.Activity.RESULT_CANCELED;
 
 public class ParticipantFragment extends Fragment {
 
+    private FloatingActionButton btnGoBack;
+    private FloatingActionButton btnRemoveParticipant;
     private FloatingActionButton btnSaveParticipant;
+
     private EditText txtPersonName;
     private EditText txtPersonBirthday;
     private EditText txtPersonEmail;
@@ -66,7 +69,17 @@ public class ParticipantFragment extends Fragment {
         this.txtPersonEmail = (EditText) v.findViewById(R.id.email_address_text);
         this.txtPersonLikes = (EditText) v.findViewById(R.id.likes_text);
         this.btnSaveParticipant = (FloatingActionButton) v.findViewById(R.id.btnSaveParticipant);
+        this.btnRemoveParticipant = (FloatingActionButton) v.findViewById(R.id.btnRemoveParticipant);
+        this.btnGoBack = (FloatingActionButton) v.findViewById(R.id.btnGoBack);
+        this.btnGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+
         if (this.participantId == null) {
+            this.btnRemoveParticipant.setVisibility(View.GONE);
             this.btnSaveParticipant.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -74,7 +87,7 @@ public class ParticipantFragment extends Fragment {
                 }
             });
         } else {
-            this.btnSaveParticipant.setBackgroundResource(R.mipmap.save);
+            this.btnSaveParticipant.setImageResource(R.mipmap.save);
             this.btnSaveParticipant.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -87,6 +100,16 @@ public class ParticipantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 doPicture();
+            }
+        });
+
+        this.btnRemoveParticipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParticipantLab participantLab = ParticipantLab.get(getContext());
+                participantLab.removeParticipant(participantLab.getParticipant(participantId));
+                Toast.makeText(getContext(), "Removed", Toast.LENGTH_SHORT).show();
+                getActivity().finish();
             }
         });
 
@@ -125,11 +148,11 @@ public class ParticipantFragment extends Fragment {
                     }
 
                     participantLab.addParticipant(p);
-                    Toast.makeText(getContext(), "Added successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Added successfully", Toast.LENGTH_SHORT).show();
 
 
-                    Intent i = new Intent(getActivity(), ParticipantListActivity.class);
-                    startActivity(i);
+                   // Intent i = new Intent(getActivity(), ParticipantListActivity.class);
+                   // startActivity(i);
                     getActivity().finish();
         }
     }
@@ -232,6 +255,7 @@ public class ParticipantFragment extends Fragment {
             p.setName(txtPersonName.getText().toString());
             p.setAge(age);
             p.setEmail(txtPersonEmail.getText().toString());
+            p.setLikes(txtPersonLikes.getText().toString());
             if (pictureDone) {
                 p.setImage(bitmapPhoto);
             } else if (!p.hasImage()){
@@ -240,8 +264,8 @@ public class ParticipantFragment extends Fragment {
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
 
 
-            Intent i = new Intent(getActivity(), ParticipantListActivity.class);
-            startActivity(i);
+            //Intent i = new Intent(getActivity(), ParticipantListActivity.class);
+            //startActivity(i);
             getActivity().finish();
         }
 

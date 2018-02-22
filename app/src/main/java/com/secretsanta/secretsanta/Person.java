@@ -20,10 +20,11 @@ public class Person {
     private Bitmap image;
     private String likes;
     private boolean hasImage;
+    private boolean havePersonAsociated;
 
     public Person() {
         id = UUID.randomUUID();
-        name = id.toString()+"name";
+        havePersonAsociated = false;
     }
 
     public boolean hasImage(){
@@ -81,5 +82,14 @@ public class Person {
 
     public String getBirthday(){
         return this.birthday;
+    }
+
+
+    public boolean havePersonAsociated(){
+        return this.havePersonAsociated;
+    }
+
+    public void setHavePersonAsociated(boolean b){
+        this.havePersonAsociated = b;
     }
 }
