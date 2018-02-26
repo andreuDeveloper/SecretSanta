@@ -7,16 +7,26 @@ package com.secretsanta.secretsanta;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import java.sql.Date;
 import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 /**
  * Created by Belal on 10/30/2015.
@@ -36,6 +46,7 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
     private String email;
     private String subject;
     private String message;
+    private DataSource image;
 
     //Progressdialog to show while sending email
     private ProgressDialog progressDialog;
@@ -89,7 +100,7 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
 
         try {
             //Creating MimeMessage object
-            MimeMessage mm = new MimeMessage(session);
+            Message mm = new MimeMessage(session);
 
             //Setting sender address
             mm.setFrom(new InternetAddress(MAIL_SECRET_SANTA));
@@ -97,9 +108,9 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             //Adding subject
             mm.setSubject(subject);
-            //Adding message
-            mm.setText(message);
-
+            //Adding the message
+            mm.setContent(message, "text/html; charset=utf-8");
+            //mm.setText(message);
             //Sending email
             Transport.send(mm);
 

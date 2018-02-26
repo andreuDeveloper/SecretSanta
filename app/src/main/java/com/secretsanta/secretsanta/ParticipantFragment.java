@@ -17,6 +17,8 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javax.sql.DataSource;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -276,6 +278,7 @@ public class ParticipantFragment extends Fragment {
         super.onActivityResult(requestCode,requestCode,data);
         if(resultCode != RESULT_CANCELED) {
             bitmapPhoto = (Bitmap) data.getExtras().get("data");
+
             this.imgProfile.setImageBitmap(bitmapPhoto);
             pictureDone = true;
         }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Date;
 import java.util.Random;
 
 public class EventActivity extends AppCompatActivity {
@@ -45,8 +46,30 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void doSecretSanta(Person personTo, Person personFrom) {
+        String parsedDate;
         String email = personFrom.getEmail().toLowerCase().trim();
         String subject = "Secret Santa Event "+personFrom.getName().trim();
+        String htmlMessage = "" +
+                "<h1>SECRET SANTA</h1>" +
+                "<h3>Event created: "+new Date()+"</h3>" + //Parse DATE
+                "<hr>" +
+                "<h5>Place: </h5>" +
+                "<h5>Price: MIN PRICE €--- MAX PRICE €</h5>" +
+                "<h5>Price: HOUR <h5>" +
+                "<hr>" +
+                "<h4>Your person is.... "+personTo.getName().toUpperCase()+"!!</h4>" +
+                "<p>Don't worry, "+personTo.getName()+" gave us some information to help you to choose the present:</p>" +
+                "<ul>" +
+                "<li>Age: "+personTo.getAge()+"</li>" +
+                "<li>Birthday: "+personTo.getBirthday()+"</li>" +
+                "<li>Likes: "+personTo.getLikes()+"</li>" +
+                "</ul>" +
+                "<hr>" +
+                "<h4>Thanks for use our application!</h4>" +
+                "<h4>Secret Santa <3</h4>" +
+                "";
+
+        /*
         String message = "\n" +
                 "Your person is....." + personTo.getName().toUpperCase()+"" +
                 "\n" +
@@ -58,9 +81,10 @@ public class EventActivity extends AppCompatActivity {
                 "\t- LIKES: "+personTo.getLikes()+"" +
                 "\n\n" +
                 "Thanks for use our application!\n\nSecret Santa <3";
+        */
 
         Log.v("SECRET: ", personTo.getName()+" -> "+personFrom.getName());
-        SendMail sm = new SendMail(this, email, subject, message);
+        SendMail sm = new SendMail(this, email, subject, htmlMessage);
 
         sm.execute();
     }
