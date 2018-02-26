@@ -7,4 +7,5 @@
     android:background="@color/background"
     tools:context="com.secretsanta.secretsanta.EventActivity">
 
+
 </android.support.constraint.ConstraintLayout>

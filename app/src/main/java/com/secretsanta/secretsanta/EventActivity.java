@@ -53,9 +53,14 @@ public class EventActivity extends AppCompatActivity {
                 "<h1>SECRET SANTA</h1>" +
                 "<h3>Event created: "+new Date()+"</h3>" + //Parse DATE
                 "<hr>" +
-                "<h5>Place: </h5>" +
-                "<h5>Price: MIN PRICE €--- MAX PRICE €</h5>" +
-                "<h5>Price: HOUR <h5>" +
+                "<h4>Date: DATE</h5>" +
+                "<h4>Hour: HOUR <h5>" +
+                "<h4>Price: MIN PRICE€ --- MAX PRICE€</h5>" +
+                "<h4>Ubication: <h5>" +
+                //"<a href=\"STRING URL MAP HERE">" +
+                "<a href=\"https://www.google.com/maps?q=39.57268981421449,2.6280283927917485\">" +
+                "<img src=\"http://www.myiconfinder.com/uploads/iconsets/256-256-9c7aae955a2bcc1811b64c019bd3df28.png\" alt=\"Event ubication\" height=\"100\" width=\"100\"/>" +
+                "</a>" +
                 "<hr>" +
                 "<h4>Your person is.... "+personTo.getName().toUpperCase()+"!!</h4>" +
                 "<p>Don't worry, "+personTo.getName()+" gave us some information to help you to choose the present:</p>" +
