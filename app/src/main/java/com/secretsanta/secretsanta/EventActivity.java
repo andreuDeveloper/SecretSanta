@@ -1,8 +1,13 @@
 package com.secretsanta.secretsanta;
 
+
+import android.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -17,10 +22,52 @@ public class EventActivity extends AppCompatActivity {
 
 
         //**// On create things
-        bindRandomParticipants();
+        //bindRandomParticipants();
 
     }
+    public void onStart(){
+        super.onStart();
 
+        EditText txtDate=(EditText) findViewById(R.id.txtdate);
+        txtDate.setKeyListener(null);
+        EditText txtHour=(EditText) findViewById(R.id.txtHour);
+        txtHour.setKeyListener(null);
+
+        txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    DialogFragment newFragment = new DateDialog(view);
+                    newFragment.show(getSupportFragmentManager(), "DatePicker");
+                }
+            }
+        });
+
+        txtDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DialogFragment newFragment = new DateDialog(v);
+                newFragment.show(getSupportFragmentManager(), "DatePicker");
+            }
+        });
+
+        txtHour.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    DialogFragment newFragment = new TimeDialog(view);
+                    newFragment.show(getSupportFragmentManager(), "timePicker");
+                }
+            }
+        });
+
+        txtHour.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DialogFragment newFragment = new TimeDialog(v);
+                newFragment.show(getSupportFragmentManager(), "timePicker");
+            }
+        });
+
+    }
 
     private void bindRandomParticipants(){
         ParticipantLab pl = ParticipantLab.get(getApplicationContext());
