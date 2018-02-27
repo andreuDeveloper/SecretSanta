@@ -111,6 +111,7 @@ public class EventMActivity extends FragmentActivity implements OnMapReadyCallba
             //Toast.makeText(getApplicationContext(), markerPosition.toString(), Toast.LENGTH_SHORT).show();
             Toast.makeText(getApplicationContext(), "Placed Secret Santa", Toast.LENGTH_SHORT).show();
             getURLMaps(markerPosition);
+            EventActivity.urlMap = getURLMaps(markerPosition);
             }
         });
     }

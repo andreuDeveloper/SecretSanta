@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class EventActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+public class EventActivity extends FragmentActivity {
     private EditText txtDate;
     private EditText txtHour;
     private EditText txtMaxPrice;
@@ -47,6 +47,8 @@ public class EventActivity extends FragmentActivity implements OnMapReadyCallbac
     private FloatingActionButton btnGoBack;
     private ScrollView scrollView;
     private View customView;
+
+    public static String urlMap;
 
     private Button btnUbi;
 
@@ -62,12 +64,6 @@ public class EventActivity extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_event);
 
 
-        marked = false;
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
 
         this.txtDate = findViewById(R.id.txtdate);
@@ -111,26 +107,7 @@ public class EventActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        this.customView.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        scrollView.requestDisallowInterceptTouchEvent(true);
-                        return false;
-                    case MotionEvent.ACTION_UP:
-                        scrollView.requestDisallowInterceptTouchEvent(false);
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        scrollView.requestDisallowInterceptTouchEvent(true);
-                        return  false;
-                    default:
-                        return true;
-                }
-            }
-        });
 
 
 
@@ -215,7 +192,7 @@ public class EventActivity extends FragmentActivity implements OnMapReadyCallbac
                 "<h4>Price: MIN PRICE€ --- MAX PRICE€</h5>" +
                 "<h4>Ubication: <h5>" +
                 //"<a href=\"STRING URL MAP HERE">" +
-                "<a href=\"https://www.google.com/maps?q=39.57268981421449,2.6280283927917485\">" +
+                "<a href="+urlMap+">" +
                 "<img src=\"http://www.myiconfinder.com/uploads/iconsets/256-256-9c7aae955a2bcc1811b64c019bd3df28.png\" alt=\"Event ubication\" height=\"100\" width=\"100\"/>" +
                 "</a>" +
                 "<hr>" +
@@ -317,112 +294,6 @@ public class EventActivity extends FragmentActivity implements OnMapReadyCallbac
         dialog.show();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.v("GRANTED", "No");
-            return;
-        }
-        locationManager.requestLocationUpdates(String.valueOf(locationManager.getBestProvider(new Criteria(), true)).toString(), 1000, 0, this);
-        Log.v("GRANTED", "Yes");
-
-
-        mMap = googleMap;
-
-
-
-        markerPosition = new LatLng(39.693826939133615,2.9987646639347076);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(markerPosition).zoom(12.5f).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        //mMap.addMarker(new MarkerOptions().position(markerPosition));
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-
-                // Creating a marker
-                MarkerOptions markerOptions = new MarkerOptions();
-
-                // Setting the position for the marker
-                markerOptions.position(latLng);
-
-                // Setting the title for the marker.
-                // This will be displayed on taping the marker
-                markerOptions.title("Secret Santa Here");
-
-                // Clears the previously touched position
-                mMap.clear();
-
-                // Animating to the touched position
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                // Placing a marker on the touched position
-                mMap.addMarker(markerOptions);
-
-                //Get Marker
-                markerPosition = markerOptions.getPosition();
-
-                marked = true;
-
-                //Toast.makeText(getApplicationContext(), markerPosition.toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "Placed Secret Santa", Toast.LENGTH_SHORT).show();
-                getURLMaps(markerPosition);
-            }
-        });
-    }
-
-    private String getURLMaps(LatLng latLng) {
-        String s = "http://maps.google.com/maps?q="+latLng.latitude+","+latLng.longitude+"";
-        Log.v("URL MAP", s);
-        return s;
-    }
-
-
-    @Override
-    public void onLocationChanged(Location loc) {
-
-        if (!marked) {
-            mMap.clear();
-            String longitude = "Longitude: " + loc.getLongitude();
-            Log.v("LONG", longitude);
-            String latitude = "Latitude: " + loc.getLatitude();
-            Log.v("LAT", latitude);
-
-            markerPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(markerPosition));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title("Secret Santa Here"));
-        }
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
 
 
 }
