@@ -12,5 +12,8 @@
     <style name="LinearProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">#FFFFFF</item>
     </style>
-
+    <style name="MyButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#E75043</item>
+        <item name="colorButtonNormal">#DA4336</item>
+    </style>
 </resources>

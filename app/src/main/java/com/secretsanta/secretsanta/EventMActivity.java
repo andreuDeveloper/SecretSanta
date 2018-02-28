@@ -81,37 +81,36 @@ public class EventMActivity extends FragmentActivity implements OnMapReadyCallba
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
-        @Override
-        public void onMapClick(LatLng latLng) {
+            @Override
+            public void onMapClick(LatLng latLng) {
 
-             // Creating a marker
-            MarkerOptions markerOptions = new MarkerOptions();
+                // Creating a marker
+                MarkerOptions markerOptions = new MarkerOptions();
 
-            // Setting the position for the marker
-            markerOptions.position(latLng);
+                // Setting the position for the marker
+                markerOptions.position(latLng);
 
-            // Setting the title for the marker.
-            // This will be displayed on taping the marker
-            markerOptions.title("Secret Santa Here");
+                // Setting the title for the marker.
+                // This will be displayed on taping the marker
+                markerOptions.title("Secret Santa Here");
 
-            // Clears the previously touched position
-            mMap.clear();
+                // Clears the previously touched position
+                mMap.clear();
 
-            // Animating to the touched position
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                // Animating to the touched position
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            // Placing a marker on the touched position
-            mMap.addMarker(markerOptions);
+                // Placing a marker on the touched position
+                mMap.addMarker(markerOptions);
 
-            //Get Marker
-            markerPosition = markerOptions.getPosition();
+                //Get Marker
+                markerPosition = markerOptions.getPosition();
 
-            marked = true;
+                marked = true;
 
-            //Toast.makeText(getApplicationContext(), markerPosition.toString(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "Placed Secret Santa", Toast.LENGTH_SHORT).show();
-            getURLMaps(markerPosition);
-            EventActivity.urlMap = getURLMaps(markerPosition);
+                //Toast.makeText(getApplicationContext(), markerPosition.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Placed Secret Santa", Toast.LENGTH_SHORT).show();
+                getURLMaps(markerPosition);
             }
         });
     }

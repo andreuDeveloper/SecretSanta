@@ -1,23 +1,13 @@
 package com.secretsanta.secretsanta;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,13 +15,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,17 +30,12 @@ public class EventActivity extends FragmentActivity {
     private FloatingActionButton btnListDone;
     private FloatingActionButton btnGoBack;
     private ScrollView scrollView;
-    private View customView;
+
 
     public static String urlMap;
 
     private Button btnUbi;
 
-    private GoogleMap mMap;
-    private boolean marked;
-
-
-    private LatLng markerPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +53,7 @@ public class EventActivity extends FragmentActivity {
 
         this.btnUbi = findViewById(R.id.btnSetUbication);
 
-        //this.customView = findViewById(R.id.customView);
+
 
         this.btnGoBack =  findViewById(R.id.btnGoBack);
         this.btnGoBack.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +82,8 @@ public class EventActivity extends FragmentActivity {
             public void onClick(View view) {
                 Intent i=new Intent(getApplicationContext(),EventMActivity.class);
 
-                getApplication().startActivity(i);
+                startActivity(i);
+
             }
         });
 
@@ -180,16 +160,15 @@ public class EventActivity extends FragmentActivity {
     }
 
     private void doSecretSanta(Person personTo, Person personFrom) {
-        String parsedDate;
         String email = personFrom.getEmail().toLowerCase().trim();
         String subject = "Secret Santa Event "+personFrom.getName().trim();
         String htmlMessage = "" +
                 "<h1>SECRET SANTA</h1>" +
                 "<h3>Event created: "+new Date()+"</h3>" + //Parse DATE
                 "<hr>" +
-                "<h4>Date: DATE</h5>" +
-                "<h4>Hour: HOUR <h5>" +
-                "<h4>Price: MIN PRICE€ --- MAX PRICE€</h5>" +
+                "<h4>Date: "+this.txtDate.getText()+"</h5>" +
+                "<h4>Hour: "+this.txtHour.getText()+" <h5>" +
+                "<h4>Price: "+this.txtMinPrice.getText()+"€ --- "+this.txtMaxPrice.getText()+"€</h5>" +
                 "<h4>Ubication: <h5>" +
                 //"<a href=\"STRING URL MAP HERE">" +
                 "<a href="+urlMap+">" +
