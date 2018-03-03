@@ -40,6 +40,9 @@ public class ParticipantLab {
         }
         return null;
     }
+    public void clear(){
+        lParticipants.clear();
+    }
 
     public Person getParticipant(int i){
         return this.lParticipants.get(i);

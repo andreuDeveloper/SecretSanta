@@ -54,11 +54,11 @@ public class ParticipantListFragment extends Fragment {
             public void onClick(View v) {
 
                 ParticipantLab lb = ParticipantLab.get(getContext());
-                //if (lb.getNumberParticipants() >= 3) {
+                if (lb.getNumberParticipants() >= 3) {
                     yesNoDialog();
-                //} else {
-                //    confirmDialog();
-                //}
+                } else {
+                    confirmDialog();
+                }
 
             }
         });

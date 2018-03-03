@@ -2,8 +2,11 @@ package com.secretsanta.secretsanta;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -32,7 +35,7 @@ public class EventActivity extends FragmentActivity {
     private ScrollView scrollView;
 
 
-    public static String urlMap;
+    public static String urlMap = "";
 
     private Button btnUbi;
 
@@ -68,9 +71,13 @@ public class EventActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
 
-                if (checkFieldsNotNull(txtDate) && checkFieldsNotNull(txtMaxPrice) && checkFieldsNotNull(txtMinPrice)
-                        && checkDateValid()) {
-                    yesNoDialog();
+                if (isInternetConnection()) {
+                    if (checkFieldsNotNull(txtDate) && checkFieldsNotNull(txtMaxPrice) && checkFieldsNotNull(txtMinPrice)
+                            && checkDateValid()) {
+                        yesNoDialog();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please, check your internet connection", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -154,6 +161,9 @@ public class EventActivity extends FragmentActivity {
                     }
                 }
             }
+
+            pl.clear();
+            this.btnListDone.setEnabled(false);
         } catch (Exception e) {
             Log.e("ERROR", "->", e.getCause());
         }
@@ -162,44 +172,59 @@ public class EventActivity extends FragmentActivity {
     private void doSecretSanta(Person personTo, Person personFrom) {
         String email = personFrom.getEmail().toLowerCase().trim();
         String subject = "Secret Santa Event "+personFrom.getName().trim();
-        String htmlMessage = "" +
-                "<h1>SECRET SANTA</h1>" +
-                "<h3>Event created: "+new Date()+"</h3>" + //Parse DATE
-                "<hr>" +
-                "<h4>Date: "+this.txtDate.getText()+"</h5>" +
-                "<h4>Hour: "+this.txtHour.getText()+" <h5>" +
-                "<h4>Price: "+this.txtMinPrice.getText()+"€ --- "+this.txtMaxPrice.getText()+"€</h5>" +
-                "<h4>Ubication: <h5>" +
-                //"<a href=\"STRING URL MAP HERE">" +
-                "<a href="+urlMap+">" +
-                "<img src=\"http://www.myiconfinder.com/uploads/iconsets/256-256-9c7aae955a2bcc1811b64c019bd3df28.png\" alt=\"Event ubication\" height=\"100\" width=\"100\"/>" +
-                "</a>" +
-                "<hr>" +
-                "<h4>Your person is.... "+personTo.getName().toUpperCase()+"!!</h4>" +
-                "<p>Don't worry, "+personTo.getName()+" gave us some information to help you to choose the present:</p>" +
-                "<ul>" +
-                "<li>Age: "+personTo.getAge()+"</li>" +
-                "<li>Birthday: "+personTo.getBirthday()+"</li>" +
-                "<li>Likes: "+personTo.getLikes()+"</li>" +
-                "</ul>" +
-                "<hr>" +
-                "<h4>Thanks for use our application!</h4>" +
-                "<h4>Secret Santa <3</h4>" +
-                "";
 
-        /*
-        String message = "\n" +
-                "Your person is....." + personTo.getName().toUpperCase()+"" +
-                "\n" +
-                "\n" +
-                "No worries "+personTo.getName()+ " gave us some information to help you to choose the present:" +
-                "\n" +
-                "\t- AGE:" +personTo.getAge()+"\n" +
-                "\t- BIRTHDAY: "+personTo.getBirthday()+"\n" +
-                "\t- LIKES: "+personTo.getLikes()+"" +
-                "\n\n" +
-                "Thanks for use our application!\n\nSecret Santa <3";
-        */
+        String htmlMessage = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String now=sdf.format(new Date());
+
+        if (urlMap != "") {
+            htmlMessage = "" +
+                    "<h1>SECRET SANTA</h1>" +
+                    "<h3>Event created: " + now + "</h3>" +
+                    "<hr>" +
+                    "<h4>Date: " + this.txtDate.getText() + "</h4>" +
+                    "<h4>Hour: " + this.txtHour.getText() + " <h4>" +
+                    "<h4>Price: " + this.txtMinPrice.getText() + "€ --- " + this.txtMaxPrice.getText() + "€</h4>" +
+                    "<h4>Ubication: <h4>" +
+                    "<a href=" + urlMap + ">" +
+                    "<img src=\"http://www.myiconfinder.com/uploads/iconsets/256-256-9c7aae955a2bcc1811b64c019bd3df28.png\" alt=\"Event ubication\" height=\"100\" width=\"100\"/>" +
+                    "</a>" +
+                    "<hr>" +
+                    "<h4>Your person is.... " + personTo.getName().toUpperCase() + "!!</h4>" +
+                    "<p>Don't worry, " + personTo.getName() + " gave us some information to help you to choose the present:</p>" +
+                    "<ul>" +
+                    "<li>Age: " + personTo.getAge() + "</li>" +
+                    "<li>Birthday: " + personTo.getBirthday() + "</li>" +
+                    "<li>Likes: " + personTo.getLikes() + "</li>" +
+                    "</ul>" +
+                    "<hr>" +
+                    "<h4>Thanks for use our application!</h4>" +
+                    "<h4>Secret Santa <3</h4>" +
+                    "";
+        } else {
+            htmlMessage = "" +
+                    "<h1>SECRET SANTA</h1>" +
+                    "<h3>Event created: " + now + "</h3>" +
+                    "<hr>" +
+                    "<h4>Date: " + this.txtDate.getText() + "</4>" +
+                    "<h4>Hour: " + this.txtHour.getText() + " <h4>" +
+                    "<h4>Price: " + this.txtMinPrice.getText() + "€ --- " + this.txtMaxPrice.getText() + "€</h4>" +
+                    "<h4>Ubication: Not selected<h4>" +
+                    "<hr>" +
+                    "<h4>Your person is.... " + personTo.getName().toUpperCase() + "!!</h4>" +
+                    "<p>Don't worry, " + personTo.getName() + " gave us some information to help you to choose the present:</p>" +
+                    "<ul>" +
+                    "<li>Age: " + personTo.getAge() + "</li>" +
+                    "<li>Birthday: " + personTo.getBirthday() + "</li>" +
+                    "<li>Likes: " + personTo.getLikes() + "</li>" +
+                    "</ul>" +
+                    "<hr>" +
+                    "<h4>Thanks for use our application!</h4>" +
+                    "<h4>Secret Santa <3</h4>" +
+                    "";
+        }
+
+
 
         Log.v("SECRET: ", personTo.getName()+" -> "+personFrom.getName());
         SendMail sm = new SendMail(this, email, subject, htmlMessage);
@@ -249,7 +274,7 @@ public class EventActivity extends FragmentActivity {
         builder.setTitle("Send emails");
 
         // Ask the final question
-        builder.setMessage("Are you sure?\nPlease, be patient");
+        builder.setMessage("Are you sure?\n\nPlease, be patient!");
 
         // Set the alert dialog yes button click listener
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -273,6 +298,16 @@ public class EventActivity extends FragmentActivity {
         dialog.show();
     }
 
+    private boolean isInternetConnection() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return  true;
+        }
+        else
+            return  false;
+    }
 
 
 }

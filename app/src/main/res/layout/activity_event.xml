@@ -111,7 +111,8 @@
                         android:id="@+id/maxPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_maxPrice" />
+                        android:hint="@string/hint_maxPrice"
+                        android:inputType="number"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -141,7 +142,8 @@
                         android:id="@+id/minPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_minPrice" />
+                        android:hint="@string/hint_minPrice"
+                        android:inputType="number"/>
                 </LinearLayout>
 
             </LinearLayout>

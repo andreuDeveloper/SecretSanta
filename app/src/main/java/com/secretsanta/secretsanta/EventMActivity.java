@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +35,7 @@ public class EventMActivity extends FragmentActivity implements OnMapReadyCallba
     private GoogleMap mMap;
     private boolean marked;
     private LatLng markerPosition;
+    private FloatingActionButton btnGoBack;
 
 
     @Override
@@ -42,7 +44,13 @@ public class EventMActivity extends FragmentActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_event_m);
 
         marked = false; //If is marked previously
-
+        this.btnGoBack =  findViewById(R.id.btnGoBack);
+        this.btnGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -110,7 +118,8 @@ public class EventMActivity extends FragmentActivity implements OnMapReadyCallba
 
                 //Toast.makeText(getApplicationContext(), markerPosition.toString(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "Placed Secret Santa", Toast.LENGTH_SHORT).show();
-                getURLMaps(markerPosition);
+
+                EventActivity.urlMap = (getURLMaps(markerPosition));
             }
         });
     }
@@ -134,7 +143,7 @@ public class EventMActivity extends FragmentActivity implements OnMapReadyCallba
 
             markerPosition = new LatLng(loc.getLatitude(), loc.getLongitude());
             mMap.animateCamera(CameraUpdateFactory.newLatLng(markerPosition));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title("Secret Santa Here"));
+            //mMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())).title("Secret Santa Here"));
         }
 
     }
